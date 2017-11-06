@@ -2,13 +2,17 @@ import java.lang.Math.abs
 import kotlin.system.measureTimeMillis
 
 fun existsInWin(mChar: Char, s: String, offset: Int, rad: Int) : Boolean {
-    val startAt = maxOf(offset - rad, 0).toLong()
-    val length = (minOf(offset + rad, s.length) - startAt).toLong()
-    val mChar = mChar.toInt()
-    return s.chars()
-            .skip(startAt)
-            .limit(length)
-            .anyMatch { it == mChar }
+    val startAt = maxOf(offset - rad, 0)
+    val endAt = minOf(offset + rad, s.length)
+    val length = endAt - startAt
+
+    if (length < 0) return false
+
+    for (i in startAt..endAt) {
+        if (s[i] == mChar) return true
+    }
+
+    return false
 }
 
 fun commonChars(chars1: String, chars2: String, match_radius: Int) =
@@ -26,7 +30,7 @@ fun jaro(s1: String, s2: String) : Double {
     val c2length = c2.count().toDouble()
 
     val transpositions = run {
-        val mismatches = c1.zip(c2).filter { (i, j) -> i != j }.count()
+        val mismatches = (c1 zip c2).filter { (i, j) -> i != j }.count()
         (mismatches + abs(c1length - c2length)) / 2.0
     }
 
@@ -41,7 +45,6 @@ fun main(args: Array<String>) {
     println("$s1, $s2 => ${jaro(s1, s2)}")
 
     val millis = measureTimeMillis {
-
         for (i in 0..10_000_000) {
             jaro(s1, s2)
         }
