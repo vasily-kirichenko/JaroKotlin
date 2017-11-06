@@ -18,8 +18,9 @@ fun existsInWin(mChar: Char, s: String, offset: Int, rad: Int) : Boolean {
 fun commonChars(chars1: String, chars2: String, match_radius: Int) : ArrayList<Char> {
     val result = ArrayList<Char>(chars1.length)
     for(i in 0 until chars1.length) {
-        if (existsInWin(chars1[i], chars2, i, match_radius))
-            result.add(chars1[i])
+        val c = chars1[i]
+        if (existsInWin(c, chars2, i, match_radius))
+            result.add(c)
     }
     return result
 }
