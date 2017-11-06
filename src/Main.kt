@@ -15,8 +15,14 @@ fun existsInWin(mChar: Char, s: String, offset: Int, rad: Int) : Boolean {
     return false
 }
 
-fun commonChars(chars1: String, chars2: String, match_radius: Int) =
-    chars1.toCharArray().filterIndexed { i, c -> existsInWin(c, chars2, i, match_radius) }
+fun commonChars(chars1: String, chars2: String, match_radius: Int) : ArrayList<Char> {
+    val result = ArrayList<Char>(chars1.length)
+    for(i in 0 until chars1.length) {
+        if (existsInWin(chars1[i], chars2, i, match_radius))
+            result.add(chars1[i])
+    }
+    return result
+}
 
 fun jaro(s1: String, s2: String) : Double {
     val matchRadius = run {
@@ -30,7 +36,12 @@ fun jaro(s1: String, s2: String) : Double {
     val c2length = c2.count().toDouble()
 
     val transpositions = run {
-        val mismatches = (c1 zip c2).filter { (i, j) -> i != j }.count()
+        val length = minOf(c1.count(), c2.count())
+        var mismatches = 0
+        for (i in 0 until length) {
+            if (c1[i] != c2[i])
+                mismatches++
+        }
         (mismatches + abs(c1length - c2length)) / 2.0
     }
 
